@@ -1,0 +1,29 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<script src="skulpt.min.js"></script>
+<script src="skulpt-stdlib.js"></script>
+<script>
+var pending = null;
+function builtinRead(x) {
+  if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][x] === undefined)
+    throw "File not found: '" + x + "'";
+  return Sk.builtinFiles["files"][x];
+}
+function runPy(code) {
+  Sk.configure({
+    output: function (t) { Android.out(t); },
+    read: builtinRead,
+    __future__: Sk.python3,
+    yieldLimit: 100,
+    inputfunTakesPrompt: true,
+    inputfun: function (p) {
+      return new Promise(function (r) { pending = r; Android.ask(p || ""); });
+    }
+  });
+  Sk.misceval.asyncToPromise(function () {
+    return Sk.importMainWithBody("<stdin>", false, code, true);
+  }).then(function () { Android.done(""); },
+          function (e) { Android.done(String(e)); });
+}
+function answerInput(t) { if (pending) { var r = pending; pending = null; r(t); } }
+</script></head><body></body></html>
