@@ -137,7 +137,7 @@ fun BarisKode(teks: String, onClick: () -> Unit) {
     ) {
         Text(
             teks,
-            fontFamily = FontFamily.Monospace,
+            fontFamily = CodeFont,
             fontSize = 14.sp,
             color = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier.padding(horizontal = 12.dp, vertical = 10.dp),
