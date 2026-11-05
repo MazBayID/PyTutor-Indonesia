@@ -103,7 +103,8 @@ fun InterpreterScreen(kode: String, onKode: (String) -> Unit) {
                 value = tfv,
                 onValueChange = { tfv = it; onKode(it.text) },
                 modifier = Modifier.fillMaxWidth().weight(1f),
-                textStyle = TextStyle(fontFamily = CodeFont, fontSize = 14.sp),
+                textStyle = TextStyle(fontFamily = CodeFont, fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurface),
+                visualTransformation = PythonSyntaxTransformation,
                 keyboardOptions = KeyboardOptions(
                     autoCorrectEnabled = false,
                     capitalization = KeyboardCapitalization.None,
@@ -123,12 +124,21 @@ fun InterpreterScreen(kode: String, onKode: (String) -> Unit) {
                     OutlinedButton(onClick = { runner.berhenti() }) { Text("Berhenti") }
                 }
                 OutlinedButton(onClick = {
+                    tfv = TextFieldValue("def main():\\n    print(\\"Halo, Python!\\")\\n\\nmain()")
+                    onKode(tfv.text)
+                }) { Text("Contoh") }
+                OutlinedButton(onClick = {
+                    tfv = TextFieldValue("")
+                    onKode("")
+                }) { Text("Bersihkan") }
+                OutlinedButton(onClick = {
                     val a = tfv.selection.min
                     val b = tfv.selection.max
                     tfv = TextFieldValue(tfv.text.replaceRange(a, b, "    "), TextRange(a + 4))
                     onKode(tfv.text)
                 }) { Text("Indent") }
             }
+            Text(if (!runner.siap) "MENYIAPKAN PYTHON…" else if (runner.berjalan) "PROGRAM BERJALAN" else "OUTPUT CONSOLE", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
             Surface(
                 color = MaterialTheme.colorScheme.surfaceVariant,
                 shape = RoundedCornerShape(12.dp),
