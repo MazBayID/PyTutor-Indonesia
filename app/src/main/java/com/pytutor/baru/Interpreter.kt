@@ -8,6 +8,7 @@ import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -111,7 +112,7 @@ fun InterpreterScreen(kode: String, onKode: (String) -> Unit) {
                 ),
                 label = { Text("Kode Python") },
             )
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Row(Modifier.horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 Button(
                     onClick = { runner.jalankan(tfv.text) },
                     enabled = runner.siap && !runner.berjalan,
@@ -124,7 +125,7 @@ fun InterpreterScreen(kode: String, onKode: (String) -> Unit) {
                     OutlinedButton(onClick = { runner.berhenti() }) { Text("Berhenti") }
                 }
                 OutlinedButton(onClick = {
-                    tfv = TextFieldValue("def main():\\n    print(\\"Halo, Python!\\")\\n\\nmain()")
+                    tfv = TextFieldValue("def main():\n    print(\"Halo, Python!\")\n\nmain()")
                     onKode(tfv.text)
                 }) { Text("Contoh") }
                 OutlinedButton(onClick = {
