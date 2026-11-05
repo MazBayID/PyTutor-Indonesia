@@ -1,5 +1,31 @@
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="108dp" android:height="108dp"
-    android:viewportWidth="108" android:viewportHeight="108">
-    <path android:fillColor="#FFD43B" android:pathData="M42,32 L42,76 L78,54 Z" />
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Two original Python-inspired shapes with a graduation cap. -->
+    <path
+        android:fillColor="#55E6FF"
+        android:pathData="M18,17 L54,4 L90,17 L54,30 Z" />
+    <path
+        android:fillColor="#B69CFF"
+        android:pathData="M35,23 L35,29 C46,37 62,37 73,29 L73,23 L54,30 Z" />
+    <path
+        android:fillColor="#FFC66D"
+        android:pathData="M88,18 L91,18 L91,31 C91,34 89,36 87,36 C85,36 83,34 83,31 L83,20 Z" />
+
+    <path
+        android:fillColor="#3776AB"
+        android:pathData="M28,42 C28,31 35,25 46,25 L60,25 C70,25 76,31 76,41 L76,57 L50,57 C45,57 42,60 42,65 L42,69 L28,69 Z" />
+    <path
+        android:fillColor="#FFD43B"
+        android:pathData="M80,66 C80,77 73,83 62,83 L48,83 C38,83 32,77 32,67 L32,51 L58,51 C63,51 66,48 66,43 L66,39 L80,39 Z" />
+
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M60,34 m-3,0 a3,3 0,1 0,6 0 a3,3 0,1 0,-6 0" />
+    <path
+        android:fillColor="#306998"
+        android:pathData="M48,74 m-3,0 a3,3 0,1 0,6 0 a3,3 0,1 0,-6 0" />
 </vector>
