@@ -144,3 +144,68 @@ fun BarisKode(teks: String, onClick: () -> Unit) {
         )
     }
 }
+
+
+/** Ringkasan Learning Galaxy, progres sektor, dan milestone XP. */
+@Composable
+fun GalaxyPanel(k: Kemajuan) {
+    val selesai = Konten.topik.count { (k.bintang[it.id] ?: 0) > 0 }
+    val total = Konten.topik.size
+    val progress = selesai / total.toFloat()
+    val milestone = listOf(100, 300, 500, 1000).count { k.xp >= it }
+    Card(Modifier.fillMaxWidth(), shape = RoundedCornerShape(20.dp), colors = CardDefaults.cardColors(containerColor = Color(0xFF10243A))) {
+        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Column(Modifier.weight(1f)) {
+                    Text("LEARNING GALAXY", color = Color(0xFF55E6FF), style = MaterialTheme.typography.labelSmall)
+                    Text("Peta perjalanan Python", color = Color.White, style = MaterialTheme.typography.titleMedium)
+                }
+                Text("✦ " + k.level, color = Color(0xFFB69CFF), style = MaterialTheme.typography.titleLarge)
+            }
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text("$selesai / $total sektor", color = Color(0xFFD7E8F7))
+                Spacer(Modifier.weight(1f))
+                Text("${(progress * 100).toInt()}%", color = Color(0xFF55E6FF))
+            }
+            LinearProgressIndicator(progress = { progress }, modifier = Modifier.fillMaxWidth().height(8.dp), color = Color(0xFF55E6FF), trackColor = Color(0xFF263D55))
+            Text("⚡ " + k.xp + " XP     🔥 " + k.streakTampil + " hari     🏅 " + milestone + " milestone", color = Color(0xFFD7E8F7), style = MaterialTheme.typography.labelMedium)
+        }
+    }
+}
+
+/** Visualisasi Bubble Sort dengan langkah maju dan tombol ulang. */
+@Composable
+fun BubbleSortVisualizer() {
+    val states = remember {
+        buildList {
+            val values = mutableListOf(5, 2, 9, 1, 7)
+            add(values.toList())
+            for (i in 0 until values.size - 1) for (j in 0 until values.size - 1 - i) {
+                if (values[j] > values[j + 1]) {
+                    val temp = values[j]; values[j] = values[j + 1]; values[j + 1] = temp
+                }
+                add(values.toList())
+            }
+        }
+    }
+    var step by remember { mutableIntStateOf(0) }
+    Card(Modifier.fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = Color(0xFF10243A)), shape = RoundedCornerShape(16.dp)) {
+        Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            Text("VISUAL LAB / BUBBLE SORT", color = Color(0xFF55E6FF), style = MaterialTheme.typography.labelSmall)
+            Text("Langkah " + (step + 1) + " dari " + states.size, color = Color.White)
+            Row(Modifier.fillMaxWidth().height(92.dp), horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.Bottom) {
+                states[step].forEach { number ->
+                    Column(Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Bottom) {
+                        Surface(Modifier.fillMaxWidth(0.72f).height((number * 7 + 12).dp), color = Color(0xFF55E6FF), shape = RoundedCornerShape(topStart = 6.dp, topEnd = 6.dp)) {}
+                        Text(number.toString(), color = Color.White)
+                    }
+                }
+            }
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                OutlinedButton(onClick = { step = 0 }, enabled = step > 0) { Text("Ulangi") }
+                Button(onClick = { if (step < states.lastIndex) step++ }, enabled = step < states.lastIndex) { Text(if (step == states.lastIndex) "Selesai" else "Langkah berikutnya") }
+            }
+            if (step == states.lastIndex) Text("Data sudah terurut!", color = Color(0xFF8CE6B0))
+        }
+    }
+}
