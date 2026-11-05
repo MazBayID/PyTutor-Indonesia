@@ -9,7 +9,7 @@ import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
 
 private val pythonTokens = Regex(
-    """("(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|#.*|\b(?:False|None|True|and|as|assert|async|await|break|class|continue|def|del|elif|else|except|finally|for|from|global|if|import|in|is|lambda|nonlocal|not|or|pass|raise|return|try|while|with|yield)\b|\b(?:abs|all|any|bool|dict|enumerate|float|int|input|len|list|max|min|print|range|reversed|round|set|sorted|str|sum|tuple|type|zip)\b|\b\d+(?:\\.\d+)?\b|\b[A-Za-z_][A-Za-z0-9_]*(?=\s*\\())"""
+    """("(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|#.*|\b(?:False|None|True|and|as|assert|async|await|break|class|continue|def|del|elif|else|except|finally|for|from|global|if|import|in|is|lambda|nonlocal|not|or|pass|raise|return|try|while|with|yield)\b|\b(?:abs|all|any|bool|dict|enumerate|float|int|input|len|list|max|min|print|range|reversed|round|set|sorted|str|sum|tuple|type|zip)\b|\b\d+(?:\.\d+)?\b|\b[A-Za-z_][A-Za-z0-9_]*(?=\s*\())"""
 )
 private val keywords = setOf("False","None","True","and","as","assert","async","await","break","class","continue","def","del","elif","else","except","finally","for","from","global","if","import","in","is","lambda","nonlocal","not","or","pass","raise","return","try","while","with","yield")
 private val builtins = setOf("abs","all","any","bool","dict","enumerate","float","int","input","len","list","max","min","print","range","reversed","round","set","sorted","str","sum","tuple","type","zip")
