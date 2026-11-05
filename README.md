@@ -23,8 +23,16 @@ Fitur yang sudah menjadi bagian dari fondasi proyek saat ini meliputi:
 - **Latihan coding:** latihan pemrograman yang dilengkapi solusi.
 - **Kumpulan algoritma:** contoh dan referensi algoritma untuk dipelajari.
 - **Interpreter Python:** menjalankan dan mencoba kode Python menggunakan Skulpt, termasuk dukungan `input()`.
+- **Antarmuka sci-fi:** tema gelap bernuansa futuristik, kartu materi berwarna, dan dashboard progres.
+- **Tipografi kode:** Anonymous Pro monospace untuk contoh, editor, output, dan tantangan susun kode.
 
 > **Catatan versi 0.01:** Implementasi dan cakupan fitur masih terus dikembangkan. Beberapa bagian dapat berubah, belum lengkap, atau memiliki keterbatasan.
+
+## Tampilan dan tipografi
+
+Antarmuka sedang dikembangkan dengan identitas visual sci-fi gelap: latar navy, aksen cyan dan violet, kartu materi, serta indikator progres. Tampilan ini akan terus disempurnakan agar tetap nyaman dibaca pada layar ponsel.
+
+Seluruh contoh dan editor kode menggunakan font monospace **Anonymous Pro** yang dibundel secara lokal agar dapat digunakan secara offline. Font didistribusikan sesuai SIL Open Font License 1.1; salinan lisensinya tersedia di [licenses/AnonymousPro-OFL.txt](licenses/AnonymousPro-OFL.txt).
 
 ## Teknologi
 
