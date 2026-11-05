@@ -487,7 +487,7 @@ fun LatihanScreen(index: Int, kemajuan: Kemajuan, onBack: () -> Unit, onCoba: (S
                     modifier = Modifier.fillMaxWidth(),
                 ) {
                     Text(
-                        if (benar) "LULUS! Output sesuai hasil yang diharapkan. +20 XP" else "Belum cocok. Periksa kode dan output, lalu coba lagi.",
+                        if (benar) "LULUS! Output sesuai hasil yang diharapkan." else "Belum cocok. Periksa kode dan output, lalu coba lagi.",
                         modifier = Modifier.padding(12.dp),
                         color = if (benar) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onErrorContainer,
                     )
