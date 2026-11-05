@@ -446,7 +446,7 @@ fun LatihanScreen(index: Int, kemajuan: Kemajuan, onBack: () -> Unit, onCoba: (S
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             AndroidView(factory = { runner.web }, modifier = Modifier.size(1.dp))
-            Text("PRACTICE MISSION  /  \${l.tingkat.uppercase()}", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.secondary)
+            Text("PRACTICE MISSION  /  ${l.tingkat.uppercase()}", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.secondary)
             Text(l.soal, style = MaterialTheme.typography.bodyLarge, lineHeight = 25.sp)
             Text("CODE EDITOR", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
             OutlinedTextField(
