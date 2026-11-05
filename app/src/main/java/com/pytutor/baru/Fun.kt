@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
@@ -26,7 +27,7 @@ import kotlinx.coroutines.delay
 /** Hujan konfeti selama ~2,5 detik. */
 @Composable
 fun Konfeti(modifier: Modifier = Modifier) {
-    val warna = listOf(Color(0xFFFFD43B), Color(0xFF306998), Color(0xFFEF5350), Color(0xFF66BB6A), Color(0xFFAB47BC))
+    val warna = listOf(Color(0xFFFFD43B), Color(0xFF55E6FF), Color(0xFFFF7D8D), Color(0xFF66D9A8), Color(0xFFB69CFF))
     val partikel = remember { List(40) { Triple(Random.nextFloat(), 0.5f + Random.nextFloat(), warna[it % warna.size]) } }
     val t = remember { Animatable(0f) }
     LaunchedEffect(Unit) { t.animateTo(1f, tween(2500, easing = LinearEasing)) }
@@ -53,7 +54,12 @@ fun BintangAnimasi(bintang: Int) {
                 spring(dampingRatio = Spring.DampingRatioMediumBouncy),
                 label = "bintang",
             )
-            Text(if (i < bintang) "⭐" else "☆", fontSize = 48.sp, modifier = Modifier.scale(skala))
+            Text(
+                if (i < bintang) "★" else "☆",
+                color = if (i < bintang) Color(0xFFFFC66D) else MaterialTheme.colorScheme.outline,
+                fontSize = 48.sp,
+                modifier = Modifier.scale(skala),
+            )
         }
     }
 }
@@ -70,19 +76,51 @@ fun Kepala(k: Kemajuan) {
     }
     Card(
         modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
+        shape = RoundedCornerShape(22.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
     ) {
-        Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
-            Text("🐍", fontSize = 44.sp)
-            Spacer(Modifier.width(12.dp))
-            Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                Text(pesan, style = MaterialTheme.typography.bodyMedium)
-                Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                    Text("Level ${k.level}", style = MaterialTheme.typography.titleMedium)
-                    Text("🔥 ${k.streakTampil} hari", style = MaterialTheme.typography.titleMedium)
+        Box {
+            Row(
+                Modifier.fillMaxWidth().padding(16.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(14.dp),
+            ) {
+                Surface(
+                    shape = RoundedCornerShape(18.dp),
+                    color = MaterialTheme.colorScheme.primaryContainer,
+                ) {
+                    Text("🐍", Modifier.padding(12.dp), fontSize = 38.sp)
                 }
-                LinearProgressIndicator(progress = { progres }, modifier = Modifier.fillMaxWidth())
-                Text("$xpLevel / 100 XP", style = MaterialTheme.typography.labelMedium)
+                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(7.dp)) {
+                    Text("WELCOME BACK, EXPLORER", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
+                    Text(pesan, style = MaterialTheme.typography.bodyMedium)
+                    Row(horizontalArrangement = Arrangement.spacedBy(14.dp)) {
+                        Text("LEVEL ${k.level}", style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.primary)
+                        Text("🔥 ${k.streakTampil} hari", style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.tertiary)
+                    }
+                    LinearProgressIndicator(
+                        progress = { progres },
+                        modifier = Modifier.fillMaxWidth().height(7.dp),
+                        color = MaterialTheme.colorScheme.primary,
+                        trackColor = MaterialTheme.colorScheme.background,
+                    )
+                    Text("$xpLevel / 100 XP", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+            }
+            Box(
+                Modifier.align(Alignment.TopEnd).size(64.dp),
+            ) {
+                Canvas(Modifier.fillMaxSize()) {
+                    drawCircle(
+                        brush = Brush.radialGradient(
+                            listOf(Color(0x3355E6FF), Color.Transparent),
+                            center = Offset(size.width, 0f),
+                            radius = size.minDimension,
+                        ),
+                        radius = size.minDimension,
+                        center = Offset(size.width, 0f),
+                    )
+                }
             }
         }
     }
@@ -92,14 +130,16 @@ fun Kepala(k: Kemajuan) {
 fun BarisKode(teks: String, onClick: () -> Unit) {
     Surface(
         onClick = onClick,
-        color = MaterialTheme.colorScheme.secondaryContainer,
+        color = MaterialTheme.colorScheme.surfaceVariant,
         shape = RoundedCornerShape(10.dp),
+        border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.2f)),
         modifier = Modifier.fillMaxWidth(),
     ) {
         Text(
             teks,
             fontFamily = FontFamily.Monospace,
             fontSize = 14.sp,
+            color = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier.padding(horizontal = 12.dp, vertical = 10.dp),
         )
     }
