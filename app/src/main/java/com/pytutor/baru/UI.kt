@@ -190,14 +190,14 @@ fun TopikScreen(index: Int, kemajuan: Kemajuan, onBack: () -> Unit, onCoba: (Str
     val haptic = androidx.compose.ui.platform.LocalHapticFeedback.current
     val bintang = when { salah == 0 -> 3; salah <= 2 -> 2; else -> 1 }
 
-    val onJawab: (Boolean) -> Unit = { benar ->
+    val onJawab: (String, Boolean) -> Unit = { xpId, benar ->
         haptic.performHapticFeedback(androidx.compose.ui.hapticfeedback.HapticFeedbackType.LongPress)
-        if (benar) kemajuan.tambahXp(10) else salah++
+        if (benar) kemajuan.tambahXpSekali(xpId, 10) else salah++
     }
     val lanjut: () -> Unit = {
         if (langkah + 1 >= total) {
-            kemajuan.simpan(t.id, bintang)
-            kemajuan.tambahXp(bintang * 10)
+            val bintangTambahan = kemajuan.simpan(t.id, bintang)
+            if (bintangTambahan > 0) kemajuan.tambahXp(bintangTambahan * 10)
             selesai = true
         } else {
             langkah++
@@ -209,8 +209,8 @@ fun TopikScreen(index: Int, kemajuan: Kemajuan, onBack: () -> Unit, onCoba: (Str
             when {
                 s == -1 -> Selesai(salah, bintang, onBack) { langkah = 0; salah = 0; selesai = false }
                 s < nP -> PelajaranView(t.pelajaran[s], s, total, onCoba, lanjut)
-                s < nP + nK -> SoalView(t.kuis[s - nP], s, total, onJawab, lanjut, s + 1 >= total)
-                else -> SusunView(t.susun[s - nP - nK], s, total, onJawab, lanjut, s + 1 >= total)
+                s < nP + nK -> SoalView(t.kuis[s - nP], s, total, "${t.id}:kuis:${s - nP}", onJawab, lanjut, s + 1 >= total)
+                else -> SusunView(t.susun[s - nP - nK], s, total, "${t.id}:susun:${s - nP - nK}", onJawab, lanjut, s + 1 >= total)
             }
         }
     }
@@ -262,7 +262,7 @@ fun PelajaranView(p: Pelajaran, nomor: Int, total: Int, onCoba: (String) -> Unit
 }
 
 @Composable
-fun SoalView(s: Soal, nomor: Int, total: Int, onJawab: (Boolean) -> Unit, onLanjut: () -> Unit, terakhir: Boolean) {
+fun SoalView(s: Soal, nomor: Int, total: Int, xpId: String, onJawab: (String, Boolean) -> Unit, onLanjut: () -> Unit, terakhir: Boolean) {
     var pilih by remember(s) { mutableStateOf<Int?>(null) }
     Column(Modifier.fillMaxSize().padding(16.dp)) {
         Text("KNOWLEDGE CHECK  /  ${nomor + 1} DARI $total", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
@@ -290,7 +290,7 @@ fun SoalView(s: Soal, nomor: Int, total: Int, onJawab: (Boolean) -> Unit, onLanj
                     onClick = {
                         if (pilih == null) {
                             pilih = i
-                            onJawab(i == s.jawaban)
+                            onJawab(xpId, i == s.jawaban)
                         }
                     },
                     color = warna,
@@ -313,7 +313,7 @@ fun SoalView(s: Soal, nomor: Int, total: Int, onJawab: (Boolean) -> Unit, onLanj
 }
 
 @Composable
-fun SusunView(s: Susun, nomor: Int, total: Int, onJawab: (Boolean) -> Unit, onLanjut: () -> Unit, terakhir: Boolean) {
+fun SusunView(s: Susun, nomor: Int, total: Int, xpId: String, onJawab: (String, Boolean) -> Unit, onLanjut: () -> Unit, terakhir: Boolean) {
     val acak = remember(s) { s.urut.shuffled() }
     val dipilih = remember(s) { mutableStateListOf<Int>() }
     var hasil by remember(s) { mutableStateOf<Boolean?>(null) }
@@ -370,7 +370,7 @@ fun SusunView(s: Susun, nomor: Int, total: Int, onJawab: (Boolean) -> Unit, onLa
                 onClick = {
                     val benar = dipilih.map { acak[it] } == s.urut
                     hasil = benar
-                    onJawab(benar)
+                    onJawab(xpId, benar)
                 },
                 enabled = dipilih.size == acak.size,
                 modifier = Modifier.fillMaxWidth(),
