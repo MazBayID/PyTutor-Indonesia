@@ -414,7 +414,7 @@ fun LatihanList(onBuka: (Int) -> Unit) {
 }
 
 @Composable
-fun LatihanScreen(index: Int, onBack: () -> Unit, onCoba: (String) -> Unit) {
+fun LatihanScreen(index: Int, kemajuan: Kemajuan, onBack: () -> Unit, onCoba: (String) -> Unit) {
     val l = Konten.latihan[index]
     val context = LocalContext.current
     val runner = remember(l.judul) { PyRunner(context) }
@@ -434,7 +434,9 @@ fun LatihanScreen(index: Int, onBack: () -> Unit, onCoba: (String) -> Unit) {
     }
     LaunchedEffect(runner.berjalan, runner.output) {
         if (sudahDijalankan && !runner.berjalan && runner.siap && runner.output.isNotEmpty()) {
-            lulus = runner.output.trim() == l.hasilDiharapkan.trim()
+            val benar = runner.output.trim() == l.hasilDiharapkan.trim()
+            lulus = benar
+            if (benar) kemajuan.tambahXpLatihan(l.judul, 20)
         }
     }
 
