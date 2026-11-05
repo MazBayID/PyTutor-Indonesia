@@ -4,7 +4,7 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher"
-        android:label="PyTutor"
+        android:label="PyTutor Indonesia"
         android:supportsRtl="true"
         android:theme="@style/Theme.PyTutor">
         <activity
