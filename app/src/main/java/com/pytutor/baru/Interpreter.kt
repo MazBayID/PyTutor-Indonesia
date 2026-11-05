@@ -103,7 +103,7 @@ fun InterpreterScreen(kode: String, onKode: (String) -> Unit) {
                 value = tfv,
                 onValueChange = { tfv = it; onKode(it.text) },
                 modifier = Modifier.fillMaxWidth().weight(1f),
-                textStyle = TextStyle(fontFamily = FontFamily.Monospace, fontSize = 14.sp),
+                textStyle = TextStyle(fontFamily = CodeFont, fontSize = 14.sp),
                 keyboardOptions = KeyboardOptions(
                     autoCorrectEnabled = false,
                     capitalization = KeyboardCapitalization.None,
@@ -136,7 +136,7 @@ fun InterpreterScreen(kode: String, onKode: (String) -> Unit) {
             ) {
                 Text(
                     if (runner.output.isEmpty()) "Keluaran akan muncul di sini…" else runner.output,
-                    fontFamily = FontFamily.Monospace,
+                    fontFamily = CodeFont,
                     fontSize = 14.sp,
                     modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(12.dp),
                 )
