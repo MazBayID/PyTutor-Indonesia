@@ -2,11 +2,11 @@
 
 **Aplikasi belajar Python berbahasa Indonesia untuk Android.**
 
-<em>Versi 0.01 · Tahap pengembangan awal</em>
+<em>Versi 0.02 · Tahap pengembangan aktif</em>
 
 PyTutor Indonesia adalah aplikasi pembelajaran Python yang dirancang untuk membantu pengguna Indonesia mengenal dasar-dasar pemrograman secara bertahap melalui materi, latihan, kuis, dan eksperimen kode langsung dari perangkat Android.
 
-Proyek ini masih dalam tahap pengembangan awal (**v0.01**). Fitur, tampilan, materi, dan pengalaman pengguna masih dapat berubah seiring proses pengembangan. Versi ini merupakan fondasi awal aplikasi, bukan rilis final.
+Proyek ini masih dalam tahap pengembangan awal (**v0.02**). Fitur, tampilan, materi, dan pengalaman pengguna masih dapat berubah seiring proses pengembangan. Versi ini merupakan fondasi awal aplikasi, bukan rilis final.
 
 ## Tentang aplikasi
 
@@ -72,7 +72,7 @@ Di dalam file tersebut, pengembangan konten dapat dilakukan dengan menambahkan a
 | Informasi | Status |
 |---|---|
 | Nama proyek | PyTutor Indonesia |
-| Versi saat ini | **v0.01** |
+| Versi saat ini | **v0.02** |
 | Tahap | Pengembangan awal |
 | Platform | Android |
 | Bahasa aplikasi | Indonesia |
