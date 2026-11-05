@@ -45,6 +45,15 @@ class Kemajuan(context: Context) {
         sp.edit().putInt("_streak", streak).putString("_terakhir", hariIni).apply()
     }
 
+    /** Memberi XP latihan satu kali per tantangan agar hadiah tidak bisa di-farm. */
+    fun tambahXpLatihan(id: String, jumlah: Int): Boolean {
+        val key = "_latihan_$id"
+        if (sp.getBoolean(key, false)) return false
+        sp.edit().putBoolean(key, true).apply()
+        tambahXp(jumlah)
+        return true
+    }
+
     fun simpan(id: String, jumlah: Int) {
         val terbaik = maxOf(jumlah, bintang[id] ?: 0)
         bintang[id] = terbaik
