@@ -91,7 +91,7 @@ fun KodeBox(kode: String, onCoba: ((String) -> Unit)? = null) {
                 Text("MONOSPACE", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
             Text(
-                kode,
+                highlightPython(kode),
                 fontFamily = CodeFont,
                 fontSize = 14.sp,
                 lineHeight = 21.sp,
@@ -119,6 +119,7 @@ fun TopikList(kemajuan: Kemajuan, onBuka: (Int) -> Unit) {
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             item { Kepala(kemajuan) }
+            item { GalaxyPanel(kemajuan) }
             item {
                 Column(verticalArrangement = Arrangement.spacedBy(3.dp)) {
                     Text("LEARNING PATH", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
@@ -469,6 +470,7 @@ fun AlgoritmaScreen(index: Int, onBack: () -> Unit, onCoba: (String) -> Unit) {
         ) {
             Text("ALGORITHM MODULE", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
             Text(a.deskripsi, style = MaterialTheme.typography.bodyLarge, lineHeight = 25.sp)
+            if (a.judul == "Bubble Sort") BubbleSortVisualizer()
             KodeBox(a.kode, onCoba)
         }
     }
