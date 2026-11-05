@@ -136,7 +136,7 @@ fun BarisKode(teks: String, onClick: () -> Unit) {
         modifier = Modifier.fillMaxWidth(),
     ) {
         Text(
-            teks,
+            highlightPython(teks),
             fontFamily = CodeFont,
             fontSize = 14.sp,
             color = MaterialTheme.colorScheme.onSurface,
