@@ -18,21 +18,23 @@ Proyek ini merupakan penulisan ulang dengan Kotlin + Jetpack Compose dan terinsp
 
 Fitur yang sudah menjadi bagian dari fondasi proyek saat ini meliputi:
 
-- **Materi pembelajaran:** topik-topik Python yang disusun untuk pembelajaran bertahap.
+- **Materi pembelajaran:** 10 sektor Python dari dasar, operator, string, koleksi, modul, hingga penanganan error.
 - **Kuis bertingkat:** soal dengan penilaian bintang 1–3 dan pembukaan topik secara berurutan.
 - **Latihan coding:** latihan pemrograman yang dilengkapi solusi.
-- **Kumpulan algoritma:** contoh dan referensi algoritma untuk dipelajari.
+- **Kumpulan algoritma:** 7 contoh algoritma, termasuk visualisasi langkah Bubble Sort.
 - **Interpreter Python:** menjalankan dan mencoba kode Python menggunakan Skulpt, termasuk dukungan `input()`.
 - **Antarmuka sci-fi:** tema gelap bernuansa futuristik, kartu materi berwarna, dan dashboard progres.
-- **Tipografi kode:** Anonymous Pro monospace untuk contoh, editor, output, dan tantangan susun kode.
+- **Syntax highlighting:** pewarnaan keyword, string, komentar, angka, fungsi bawaan, dan nama fungsi Python.
+- **Tipografi kode:** Anonymous Pro Regular untuk contoh, editor, output, dan tantangan susun kode.
+- **Learning Galaxy:** ringkasan sektor selesai, level, XP, streak, dan milestone.
 
 > **Catatan versi 0.01:** Implementasi dan cakupan fitur masih terus dikembangkan. Beberapa bagian dapat berubah, belum lengkap, atau memiliki keterbatasan.
 
-## Tampilan dan tipografi
+## Tampilan, editor, dan Learning Galaxy
 
-Antarmuka sedang dikembangkan dengan identitas visual sci-fi gelap: latar navy, aksen cyan dan violet, kartu materi, serta indikator progres. Tampilan ini akan terus disempurnakan agar tetap nyaman dibaca pada layar ponsel.
+Antarmuka sedang dikembangkan dengan identitas visual sci-fi gelap: latar navy, aksen cyan dan violet, kartu materi, serta indikator progres. Tampilan ini akan terus disempurnakan agar tetap nyaman dibaca pada layar ponsel. Dashboard menampilkan ringkasan progres Learning Galaxy, sementara visualisasi Bubble Sort memungkinkan pengguna menelusuri proses pengurutan langkah demi langkah.
 
-Seluruh contoh dan editor kode menggunakan font monospace **Anonymous Pro** yang dibundel secara lokal agar dapat digunakan secara offline. Font didistribusikan sesuai SIL Open Font License 1.1; salinan lisensinya tersedia di [licenses/AnonymousPro-OFL.txt](licenses/AnonymousPro-OFL.txt).
+Seluruh contoh dan editor kode menggunakan font monospace **Anonymous Pro Regular** yang dibundel secara lokal agar dapat digunakan secara offline. Font didistribusikan sesuai SIL Open Font License 1.1; salinan lisensinya tersedia di [licenses/AnonymousPro-OFL.txt](licenses/AnonymousPro-OFL.txt).
 
 ## Teknologi
 
