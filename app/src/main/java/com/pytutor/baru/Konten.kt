@@ -182,6 +182,131 @@ object Konten {
                 Soal("Cara menambah item di akhir list adalah…", listOf(".add()", ".append()", ".push()", ".insert_end()"), 1),
             ),
         ),
+
+        Topik(
+            "operator", "Operator Python", "Aritmetika, perbandingan, logika, dan keanggotaan",
+            listOf(
+                Pelajaran("Operator aritmetika", listOf(
+                    Teks("Python mendukung +, -, *, /, // (pembagian bulat), % (sisa bagi), dan ** (pangkat)."),
+                    Kode("""a = 17
+b = 5
+print(a // b)
+print(a % b)
+print(2 ** 3)""".trimIndent()),
+                )),
+                Pelajaran("Operator logika dan keanggotaan", listOf(
+                    Teks("and membutuhkan semua kondisi benar, or cukup salah satu benar, dan not membalik nilai boolean. Operator in memeriksa keanggotaan."),
+                    Kode("""angka = [2, 4, 6, 8]
+print(4 in angka)
+print(3 not in angka)
+print(10 > 5 and 2 < 4)""".trimIndent()),
+                )),
+            ),
+            listOf(
+                Soal("Operator untuk menghitung pangkat adalah…", listOf("*", "**", "//", "%"), 1),
+                Soal("Hasil dari 17 // 5 adalah…", listOf("3", "3.4", "2", "4"), 0),
+                Soal("Operator untuk memeriksa keanggotaan adalah…", listOf("is", "in", "==", "and"), 1),
+            ),
+        ),
+        Topik(
+            "string", "Mengolah String", "Indeks, slicing, format, dan metode teks",
+            listOf(
+                Pelajaran("Indeks dan slicing", listOf(
+                    Teks("String adalah urutan karakter. Indeks dimulai dari 0 dan indeks negatif menghitung dari belakang. Slicing mengambil sebagian teks dengan pola teks[awal:akhir]."),
+                    Kode("""kata = "Python"
+print(kata[0])
+print(kata[-1])
+print(kata[1:4])""".trimIndent()),
+                )),
+                Pelajaran("Metode string dan format", listOf(
+                    Teks("Gunakan lower(), upper(), strip(), replace(), dan split() untuk mengolah teks. f-string memudahkan penyisipan nilai."),
+                    Kode("""nama = "  Budi  "
+rapi = nama.strip().title()
+umur = 18
+print(f"Halo {rapi}, umur {umur}")""".trimIndent()),
+                )),
+            ),
+            listOf(
+                Soal("Indeks karakter pertama string adalah…", listOf("0", "1", "-1", "Panjang string"), 0),
+                Soal("Metode untuk menghapus spasi di tepi adalah…", listOf("trim()", "strip()", "clean()", "remove()"), 1),
+                Soal("f-string ditandai dengan awalan…", listOf("s", "f", "format", "$"), 1),
+            ),
+        ),
+        Topik(
+            "koleksi", "Dictionary dan Koleksi", "Menyimpan data dengan pasangan kunci dan nilai",
+            listOf(
+                Pelajaran("Dictionary", listOf(
+                    Teks("Dictionary menyimpan pasangan kunci dan nilai. Ambil nilai menggunakan kunci, lalu tambahkan atau ubah nilai dengan penugasan."),
+                    Kode("""siswa = {"nama": "Ayu", "nilai": 90}
+print(siswa["nama"])
+siswa["kelas"] = "10A"
+print(siswa.get("nilai"))""".trimIndent()),
+                )),
+                Pelajaran("Tuple dan set", listOf(
+                    Teks("Tuple mirip list tetapi tidak dapat diubah. Set menyimpan anggota unik dan cocok untuk operasi himpunan."),
+                    Kode("""koordinat = (10, 20)
+warna = {"merah", "biru", "merah"}
+print(koordinat[0])
+print(warna)
+print({1, 2, 3} | {3, 4})""".trimIndent()),
+                )),
+            ),
+            listOf(
+                Soal("Dictionary menyimpan data dalam bentuk…", listOf("Indeks saja", "Kunci dan nilai", "Karakter", "Baris kode"), 1),
+                Soal("Struktur data yang tidak dapat diubah adalah…", listOf("List", "Dictionary", "Tuple", "Set"), 2),
+                Soal("Set secara otomatis menghilangkan…", listOf("Angka", "Duplikasi", "String", "Kunci"), 1),
+            ),
+        ),
+        Topik(
+            "modul", "Modul dan Fungsi Lanjutan", "import, parameter, dan ruang lingkup",
+            listOf(
+                Pelajaran("Menggunakan modul", listOf(
+                    Teks("Modul berisi fungsi dan alat yang dapat digunakan kembali. import memuat modul, lalu nama_modul.fungsi() memanggil fiturnya."),
+                    Kode("""import math
+print(math.sqrt(81))
+print(math.pi)""".trimIndent()),
+                    Teks("Ketersediaan modul bergantung pada interpreter Skulpt yang digunakan aplikasi."),
+                )),
+                Pelajaran("Parameter dan nilai bawaan", listOf(
+                    Teks("Fungsi dapat memiliki parameter default. Argumen bernama membuat pemanggilan fungsi lebih jelas."),
+                    Kode("""def sapa(nama, pesan="Halo"):
+    print(pesan, nama)
+
+sapa("Dina")
+sapa(nama="Raka", pesan="Selamat pagi")""".trimIndent()),
+                )),
+            ),
+            listOf(
+                Soal("Kata kunci untuk memuat modul adalah…", listOf("include", "import", "using", "load"), 1),
+                Soal("Nilai bawaan parameter ditulis menggunakan…", listOf("==", "=", ":", "->"), 1),
+                Soal("Pemanggilan math.sqrt(81) menghasilkan…", listOf("8", "9", "18", "81"), 1),
+            ),
+        ),
+        Topik(
+            "error", "Menangani Kesalahan", "try, except, dan debugging dasar",
+            listOf(
+                Pelajaran("Memahami error", listOf(
+                    Teks("SyntaxError muncul saat penulisan kode tidak sesuai aturan. NameError biasanya muncul ketika nama belum didefinisikan. TypeError terjadi saat operasi tidak cocok dengan tipe data."),
+                    Kode("""angka = 10
+print(angka)
+# Periksa nama variabel dan tipe data
+# jika program menghasilkan error.""".trimIndent()),
+                )),
+                Pelajaran("try dan except", listOf(
+                    Teks("Gunakan try untuk kode yang berpotensi gagal dan except untuk menangani jenis kesalahan tertentu."),
+                    Kode("""try:
+    umur = int(input("Umur: "))
+    print("Tahun depan:", umur + 1)
+except ValueError:
+    print("Masukkan angka yang valid")""".trimIndent()),
+                )),
+            ),
+            listOf(
+                Soal("Blok untuk menangani kesalahan adalah…", listOf("catch", "except", "error", "handle"), 1),
+                Soal("Nama variabel yang belum ada memicu…", listOf("NameError", "ValueError", "SyntaxError", "IndexError"), 0),
+                Soal("Blok kode yang dicoba terlebih dahulu adalah…", listOf("except", "finally", "try", "raise"), 2),
+            ),
+        ),
     )
 
     val topik = topikAsli.map {
