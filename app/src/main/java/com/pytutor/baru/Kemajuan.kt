@@ -54,10 +54,22 @@ class Kemajuan(context: Context) {
         return true
     }
 
-    fun simpan(id: String, jumlah: Int) {
-        val terbaik = maxOf(jumlah, bintang[id] ?: 0)
+    /** Memberi XP untuk jawaban benar hanya sekali, termasuk setelah aplikasi dibuka ulang. */
+    fun tambahXpSekali(id: String, jumlah: Int): Boolean {
+        val key = "_xp_once_$id"
+        if (sp.getBoolean(key, false)) return false
+        sp.edit().putBoolean(key, true).apply()
+        tambahXp(jumlah)
+        return true
+    }
+
+    /** Menyimpan rekor bintang dan mengembalikan kenaikan bintang yang baru diraih. */
+    fun simpan(id: String, jumlah: Int): Int {
+        val sebelumnya = bintang[id] ?: 0
+        val terbaik = maxOf(jumlah, sebelumnya)
         bintang[id] = terbaik
         sp.edit().putInt(id, terbaik).apply()
+        return terbaik - sebelumnya
     }
 
     fun terbuka(index: Int): Boolean =
