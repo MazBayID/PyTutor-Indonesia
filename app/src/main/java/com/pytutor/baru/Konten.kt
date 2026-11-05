@@ -15,7 +15,7 @@ data class Topik(
     val kuis: List<Soal>,
     val susun: List<Susun> = emptyList(),
 )
-data class Latihan(val judul: String, val tingkat: String, val soal: String, val solusi: String)
+data class Latihan(val judul: String, val tingkat: String, val soal: String, val solusi: String, val inputUji: List<String> = emptyList(), val hasilDiharapkan: String = "")
 data class Algoritma(val judul: String, val deskripsi: String, val kode: String)
 
 object Konten {
@@ -319,14 +319,14 @@ except ValueError:
             """
             nama = input("Siapa namamu? ")
             print("Halo, " + nama + "!")
-            """.trimIndent()),
+            """.trimIndent(), listOf("Zero"), "Halo, Zero!"),
         Latihan("Luas Lingkaran", "Mudah",
             "Hitung dan tampilkan luas lingkaran dengan jari-jari 7 (gunakan π = 3.14).",
             """
             r = 7
             luas = 3.14 * r * r
             print("Luas lingkaran:", luas)
-            """.trimIndent()),
+            """.trimIndent(), emptyList(), "Luas lingkaran: 153.86"),
         Latihan("Ganjil atau Genap", "Sedang",
             "Minta sebuah bilangan bulat, lalu tampilkan apakah bilangan itu ganjil atau genap.",
             """
@@ -335,14 +335,14 @@ except ValueError:
                 print("Genap")
             else:
                 print("Ganjil")
-            """.trimIndent()),
+            """.trimIndent(), listOf("8"), "Genap"),
         Latihan("Tabel Perkalian", "Sedang",
             "Minta sebuah bilangan, lalu tampilkan tabel perkaliannya dari 1 sampai 10.",
             """
             n = int(input("Tabel perkalian berapa? "))
             for i in range(1, 11):
                 print(n, "x", i, "=", n * i)
-            """.trimIndent()),
+            """.trimIndent(), listOf("2"), "2 x 1 = 2\n2 x 2 = 4\n2 x 3 = 6\n2 x 4 = 8\n2 x 5 = 10\n2 x 6 = 12\n2 x 7 = 14\n2 x 8 = 16\n2 x 9 = 18\n2 x 10 = 20"),
         Latihan("Palindrom", "Sulit",
             "Minta sebuah kata, lalu tampilkan apakah kata itu palindrom (dibaca sama dari depan dan belakang, contoh: katak).",
             """
@@ -351,14 +351,14 @@ except ValueError:
                 print("Palindrom")
             else:
                 print("Bukan palindrom")
-            """.trimIndent()),
+            """.trimIndent(), listOf("katak"), "Palindrom"),
         Latihan("Rata-rata Nilai", "Sedang",
             "Buat list nilai, hitung rata-ratanya, lalu tampilkan hasilnya.",
             """
             nilai = [80, 90, 75, 85]
             rata = sum(nilai) / len(nilai)
             print("Rata-rata:", rata)
-            """.trimIndent()),
+            """.trimIndent(), emptyList(), "Rata-rata: 82.5"),
         Latihan("Kalkulator Sederhana", "Sedang",
             "Buat fungsi yang menerima dua angka dan operator (+, -, *, /), lalu mengembalikan hasilnya.",
             """
@@ -374,7 +374,7 @@ except ValueError:
                 return "Operasi tidak valid"
 
             print(hitung(8, "*", 3))
-            """.trimIndent()),
+            """.trimIndent(), emptyList(), "24"),
         Latihan("Frekuensi Huruf", "Sulit",
             "Hitung berapa kali setiap huruf muncul dalam sebuah kata menggunakan dictionary.",
             """
@@ -383,7 +383,7 @@ except ValueError:
             for huruf in kata:
                 frekuensi[huruf] = frekuensi.get(huruf, 0) + 1
             print(frekuensi)
-            """.trimIndent()),
+            """.trimIndent(), emptyList(), "{'b': 1, 'a': 3, 'n': 2}"),
         Latihan("Bilangan Prima", "Sulit",
             "Periksa apakah sebuah bilangan lebih besar dari 1 adalah bilangan prima.",
             """
@@ -394,7 +394,7 @@ except ValueError:
                     prima = False
                     break
             print("Prima" if prima else "Bukan prima")
-            """.trimIndent()),
+            """.trimIndent(), emptyList(), "Prima"),
     )
 
     val algoritma = listOf(
