@@ -352,6 +352,49 @@ except ValueError:
             else:
                 print("Bukan palindrom")
             """.trimIndent()),
+        Latihan("Rata-rata Nilai", "Sedang",
+            "Buat list nilai, hitung rata-ratanya, lalu tampilkan hasilnya.",
+            """
+            nilai = [80, 90, 75, 85]
+            rata = sum(nilai) / len(nilai)
+            print("Rata-rata:", rata)
+            """.trimIndent()),
+        Latihan("Kalkulator Sederhana", "Sedang",
+            "Buat fungsi yang menerima dua angka dan operator (+, -, *, /), lalu mengembalikan hasilnya.",
+            """
+            def hitung(a, operator, b):
+                if operator == "+":
+                    return a + b
+                if operator == "-":
+                    return a - b
+                if operator == "*":
+                    return a * b
+                if operator == "/" and b != 0:
+                    return a / b
+                return "Operasi tidak valid"
+
+            print(hitung(8, "*", 3))
+            """.trimIndent()),
+        Latihan("Frekuensi Huruf", "Sulit",
+            "Hitung berapa kali setiap huruf muncul dalam sebuah kata menggunakan dictionary.",
+            """
+            kata = "banana"
+            frekuensi = {}
+            for huruf in kata:
+                frekuensi[huruf] = frekuensi.get(huruf, 0) + 1
+            print(frekuensi)
+            """.trimIndent()),
+        Latihan("Bilangan Prima", "Sulit",
+            "Periksa apakah sebuah bilangan lebih besar dari 1 adalah bilangan prima.",
+            """
+            n = 29
+            prima = n > 1
+            for i in range(2, n):
+                if n % i == 0:
+                    prima = False
+                    break
+            print("Prima" if prima else "Bukan prima")
+            """.trimIndent()),
     )
 
     val algoritma = listOf(
@@ -402,6 +445,40 @@ except ValueError:
                 return -1
 
             print(cari_biner([1, 3, 5, 7, 9, 11], 7))
+            """.trimIndent()),
+        Algoritma("Linear Search", "Memeriksa elemen satu per satu sampai target ditemukan atau data habis.",
+            """
+            def cari_linear(data, target):
+                for indeks, nilai in enumerate(data):
+                    if nilai == target:
+                        return indeks
+                return -1
+
+            print(cari_linear([4, 8, 2, 9], 2))
+            """.trimIndent()),
+        Algoritma("Selection Sort", "Memilih nilai terkecil dari bagian yang belum terurut lalu menukarnya ke posisi berikutnya.",
+            """
+            def selection_sort(data):
+                for i in range(len(data)):
+                    terkecil = i
+                    for j in range(i + 1, len(data)):
+                        if data[j] < data[terkecil]:
+                            terkecil = j
+                    data[i], data[terkecil] = data[terkecil], data[i]
+                return data
+
+            print(selection_sort([5, 2, 9, 1, 7]))
+            """.trimIndent()),
+        Algoritma("Stack dan Queue", "Stack memakai prinsip LIFO, sedangkan queue memakai FIFO.",
+            """
+            stack = []
+            stack.append("A")
+            stack.append("B")
+            print(stack.pop())
+
+            antrean = ["A", "B"]
+            antrean.append("C")
+            print(antrean.pop(0))
             """.trimIndent()),
     )
 }
