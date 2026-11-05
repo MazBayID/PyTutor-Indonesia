@@ -267,7 +267,7 @@ fun PelajaranView(p: Pelajaran, nomor: Int, total: Int, onCoba: (String) -> Unit
 }
 
 @Composable
-fun SoalView(s: Soal, nomor: Int, total: Int, xpId: String, onJawab: (String, Boolean) -> Unit, onLanjut: () -> Unit, terakhir: Boolean) {
+fun SoalView(s: Soal, nomor: Int, total: Int, xpId: String, onJawab: (String, Boolean) -> Boolean, onLanjut: () -> Unit, terakhir: Boolean) {
     var pilih by remember(s) { mutableStateOf<Int?>(null) }
     var xpBaru by remember(s) { mutableStateOf(false) }
     Column(Modifier.fillMaxSize().padding(16.dp)) {
