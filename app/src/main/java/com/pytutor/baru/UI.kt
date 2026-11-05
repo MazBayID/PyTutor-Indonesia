@@ -92,7 +92,7 @@ fun KodeBox(kode: String, onCoba: ((String) -> Unit)? = null) {
             }
             Text(
                 kode,
-                fontFamily = FontFamily.Monospace,
+                fontFamily = CodeFont,
                 fontSize = 14.sp,
                 lineHeight = 21.sp,
                 color = MaterialTheme.colorScheme.onSurface,
