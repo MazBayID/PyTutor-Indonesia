@@ -119,7 +119,7 @@ fun App(kemajuan: Kemajuan) {
             }
             composable("latihan") { LatihanList { nav.navigate("latihan/$it") } }
             composable("latihan/{i}", intArg("i")) {
-                LatihanScreen(it.arguments!!.getInt("i"), { nav.popBackStack() }, coba)
+                LatihanScreen(it.arguments!!.getInt("i"), kemajuan, { nav.popBackStack() }, coba)
             }
             composable("algoritma") { AlgoritmaList { nav.navigate("algoritma/$it") } }
             composable("algoritma/{i}", intArg("i")) {
