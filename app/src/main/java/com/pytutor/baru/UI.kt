@@ -320,7 +320,7 @@ fun SoalView(s: Soal, nomor: Int, total: Int, xpId: String, onJawab: (String, Bo
 }
 
 @Composable
-fun SusunView(s: Susun, nomor: Int, total: Int, xpId: String, onJawab: (String, Boolean) -> Unit, onLanjut: () -> Unit, terakhir: Boolean) {
+fun SusunView(s: Susun, nomor: Int, total: Int, xpId: String, onJawab: (String, Boolean) -> Boolean, onLanjut: () -> Unit, terakhir: Boolean) {
     val acak = remember(s) { s.urut.shuffled() }
     val dipilih = remember(s) { mutableStateListOf<Int>() }
     var hasil by remember(s) { mutableStateOf<Boolean?>(null) }
