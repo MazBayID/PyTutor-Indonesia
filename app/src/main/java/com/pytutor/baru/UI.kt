@@ -24,6 +24,9 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -413,21 +416,115 @@ fun LatihanList(onBuka: (Int) -> Unit) {
 @Composable
 fun LatihanScreen(index: Int, onBack: () -> Unit, onCoba: (String) -> Unit) {
     val l = Konten.latihan[index]
-    var tampil by rememberSaveable { mutableStateOf(false) }
+    val context = LocalContext.current
+    val runner = remember(l.judul) { PyRunner(context) }
+    DisposableEffect(runner) { onDispose { runner.tutup() } }
+    var kode by remember(l.judul) { mutableStateOf("# Tulis solusi Python-mu di sini\n") }
+    var tampilSolusi by rememberSaveable { mutableStateOf(false) }
+    var sudahDijalankan by remember(l.judul) { mutableStateOf(false) }
+    var inputIndex by remember(l.judul) { mutableIntStateOf(0) }
+    var lulus by remember(l.judul) { mutableStateOf<Boolean?>(null) }
+
+    LaunchedEffect(runner.prompt) {
+        if (runner.prompt != null && inputIndex < l.inputUji.size) {
+            val jawabanUji = l.inputUji[inputIndex]
+            inputIndex++
+            runner.jawab(jawabanUji)
+        }
+    }
+    LaunchedEffect(runner.berjalan, runner.output) {
+        if (sudahDijalankan && !runner.berjalan && runner.siap && runner.output.isNotEmpty()) {
+            lulus = runner.output.trim() == l.hasilDiharapkan.trim()
+        }
+    }
+
     Halaman(l.judul, onBack) {
         Column(
             Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
-            Text("PRACTICE MISSION  /  ${l.tingkat.uppercase()}", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.secondary)
+            AndroidView(factory = { runner.web }, modifier = Modifier.size(1.dp))
+            Text("PRACTICE MISSION  /  \${l.tingkat.uppercase()}", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.secondary)
             Text(l.soal, style = MaterialTheme.typography.bodyLarge, lineHeight = 25.sp)
-            Button(onClick = { onCoba("# Tulis solusimu di sini\n") }, modifier = Modifier.fillMaxWidth()) {
-                Text("Kerjakan di Code Lab")
+            Text("CODE EDITOR", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
+            OutlinedTextField(
+                value = kode,
+                onValueChange = { kode = it; lulus = null },
+                modifier = Modifier.fillMaxWidth().heightIn(min = 180.dp),
+                textStyle = TextStyle(fontFamily = CodeFont, fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurface),
+                visualTransformation = PythonSyntaxTransformation,
+                keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(
+                    autoCorrectEnabled = false,
+                    capitalization = androidx.compose.ui.text.input.KeyboardCapitalization.None,
+                ),
+                label = { Text("Tulis kode Python") },
+            )
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Button(
+                    onClick = {
+                        inputIndex = 0
+                        lulus = null
+                        sudahDijalankan = true
+                        runner.jalankan(kode)
+                    },
+                    enabled = runner.siap && !runner.berjalan,
+                ) {
+                    Text(if (runner.berjalan) "Menjalankan…" else "Uji jawaban")
+                }
+                OutlinedButton(onClick = { onCoba(kode) }) { Text("Code Lab") }
             }
-            OutlinedButton(onClick = { tampil = !tampil }, modifier = Modifier.fillMaxWidth()) {
-                Text(if (tampil) "Sembunyikan solusi" else "Lihat solusi")
+            Text(
+                if (!runner.siap) "MENYIAPKAN PYTHON…" else "TES OTOMATIS DENGAN INPUT CONTOH",
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.primary,
+            )
+            lulus?.let { benar ->
+                Surface(
+                    color = if (benar) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.errorContainer,
+                    shape = RoundedCornerShape(12.dp),
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    Text(
+                        if (benar) "LULUS! Output sesuai hasil yang diharapkan. +20 XP" else "Belum cocok. Periksa kode dan output, lalu coba lagi.",
+                        modifier = Modifier.padding(12.dp),
+                        color = if (benar) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onErrorContainer,
+                    )
+                }
             }
-            if (tampil) KodeBox(l.solusi, onCoba)
+            Text("OUTPUT CONSOLE", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
+            Surface(
+                color = MaterialTheme.colorScheme.surfaceVariant,
+                shape = RoundedCornerShape(12.dp),
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                Text(
+                    runner.output.ifEmpty { "Output program akan muncul di sini…" },
+                    fontFamily = CodeFont,
+                    fontSize = 13.sp,
+                    modifier = Modifier.fillMaxWidth().padding(12.dp),
+                )
+            }
+            OutlinedButton(onClick = { tampilSolusi = !tampilSolusi }, modifier = Modifier.fillMaxWidth()) {
+                Text(if (tampilSolusi) "Sembunyikan solusi" else "Lihat solusi")
+            }
+            if (tampilSolusi) KodeBox(l.solusi)
+        }
+    }
+
+    runner.prompt?.let { prompt ->
+        if (inputIndex >= l.inputUji.size) {
+            var jawaban by remember(prompt) { mutableStateOf("") }
+            AlertDialog(
+                onDismissRequest = { runner.jawab("") },
+                title = { Text("Input Python") },
+                text = {
+                    Column {
+                        Text(prompt)
+                        OutlinedTextField(value = jawaban, onValueChange = { jawaban = it }, singleLine = true)
+                    }
+                },
+                confirmButton = { TextButton(onClick = { runner.jawab(jawaban) }) { Text("Kirim") } },
+            )
         }
     }
 }
