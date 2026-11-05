@@ -4,11 +4,14 @@ package com.pytutor.baru
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -20,41 +23,79 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.hapticfeedback.HapticFeedbackType
-import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
+private val NeonBorder = androidx.compose.ui.graphics.Color(0xFF28516B)
+
 @Composable
 fun Halaman(judul: String, onBack: (() -> Unit)? = null, konten: @Composable () -> Unit) {
     Scaffold(
+        containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             TopAppBar(
-                title = { Text(judul) },
-                navigationIcon = {
-                    if (onBack != null) {
-                        IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, "Kembali") }
+                title = {
+                    Column(verticalArrangement = Arrangement.spacedBy(1.dp)) {
+                        Text(judul, style = MaterialTheme.typography.titleLarge)
+                        Text(
+                            "PYTUTOR INDONESIA  /  LEARNING SYSTEM",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.75f),
+                        )
                     }
                 },
+                navigationIcon = {
+                    if (onBack != null) {
+                        IconButton(onClick = onBack) {
+                            Icon(Icons.AutoMirrored.Filled.ArrowBack, "Kembali")
+                        }
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.background,
+                    titleContentColor = MaterialTheme.colorScheme.onBackground,
+                    navigationIconContentColor = MaterialTheme.colorScheme.primary,
+                ),
             )
         },
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
-    ) { pad -> Box(Modifier.padding(pad)) { konten() } }
+    ) { pad ->
+        Box(
+            Modifier.padding(pad).fillMaxSize().background(
+                Brush.verticalGradient(
+                    listOf(
+                        MaterialTheme.colorScheme.background,
+                        MaterialTheme.colorScheme.surface,
+                        MaterialTheme.colorScheme.background,
+                    ),
+                ),
+            ),
+        ) { konten() }
+    }
 }
 
 @Composable
 fun KodeBox(kode: String, onCoba: ((String) -> Unit)? = null) {
     Surface(
         color = MaterialTheme.colorScheme.surfaceVariant,
-        shape = RoundedCornerShape(12.dp),
+        shape = RoundedCornerShape(14.dp),
+        border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.25f)),
         modifier = Modifier.fillMaxWidth(),
     ) {
-        Column(Modifier.padding(12.dp)) {
+        Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text("PYTHON", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
+                Spacer(Modifier.weight(1f))
+                Text("MONOSPACE", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
             Text(
                 kode,
                 fontFamily = FontFamily.Monospace,
                 fontSize = 14.sp,
+                lineHeight = 21.sp,
+                color = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.horizontalScroll(rememberScrollState()),
             )
             if (onCoba != null) {
@@ -74,25 +115,58 @@ fun KodeBox(kode: String, onCoba: ((String) -> Unit)? = null) {
 fun TopikList(kemajuan: Kemajuan, onBuka: (Int) -> Unit) {
     Halaman("Belajar Python") {
         LazyColumn(
-            contentPadding = PaddingValues(16.dp),
+            contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 10.dp, bottom = 24.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             item { Kepala(kemajuan) }
+            item {
+                Column(verticalArrangement = Arrangement.spacedBy(3.dp)) {
+                    Text("LEARNING PATH", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
+                    Text("Pilih sektor untuk memulai perjalananmu.", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+            }
             itemsIndexed(Konten.topik) { i, t ->
                 val terbuka = kemajuan.terbuka(i)
                 val bintang = kemajuan.bintang[t.id] ?: 0
                 Card(
                     onClick = { if (terbuka) onBuka(i) },
                     enabled = terbuka,
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth().border(
+                        1.dp,
+                        if (terbuka) NeonBorder else MaterialTheme.colorScheme.outline.copy(alpha = 0.18f),
+                        RoundedCornerShape(18.dp),
+                    ),
+                    shape = RoundedCornerShape(18.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = if (terbuka) MaterialTheme.colorScheme.surfaceVariant else MaterialTheme.colorScheme.surface.copy(alpha = 0.65f),
+                        disabledContainerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.65f),
+                    ),
                 ) {
-                    Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
-                        Column(Modifier.weight(1f)) {
-                            Text("${i + 1}. ${t.judul}", style = MaterialTheme.typography.titleMedium)
-                            Text(t.deskripsi, style = MaterialTheme.typography.bodyMedium)
+                    Row(
+                        Modifier.padding(16.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(13.dp),
+                    ) {
+                        Surface(
+                            color = if (terbuka) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceVariant,
+                            shape = RoundedCornerShape(13.dp),
+                        ) {
+                            Text(
+                                "%02d".format(i + 1),
+                                Modifier.padding(horizontal = 13.dp, vertical = 11.dp),
+                                color = if (terbuka) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
+                                style = MaterialTheme.typography.titleMedium,
+                            )
                         }
-                        if (!terbuka) Icon(Icons.Default.Lock, "Terkunci")
-                        else if (bintang > 0) Text("★".repeat(bintang) + "☆".repeat(3 - bintang))
+                        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                            Text(t.judul, style = MaterialTheme.typography.titleMedium)
+                            Text(t.deskripsi, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            if (bintang > 0) {
+                                Text("★".repeat(bintang) + "☆".repeat(3 - bintang), color = MaterialTheme.colorScheme.tertiary)
+                            }
+                        }
+                        if (!terbuka) Icon(Icons.Default.Lock, "Terkunci", tint = MaterialTheme.colorScheme.onSurfaceVariant)
+                        else Text("›", color = MaterialTheme.colorScheme.primary, style = MaterialTheme.typography.headlineMedium)
                     }
                 }
             }
@@ -109,11 +183,11 @@ fun TopikScreen(index: Int, kemajuan: Kemajuan, onBack: () -> Unit, onCoba: (Str
     var langkah by rememberSaveable { mutableIntStateOf(0) }
     var salah by rememberSaveable { mutableIntStateOf(0) }
     var selesai by rememberSaveable { mutableStateOf(false) }
-    val haptic = LocalHapticFeedback.current
+    val haptic = androidx.compose.ui.platform.LocalHapticFeedback.current
     val bintang = when { salah == 0 -> 3; salah <= 2 -> 2; else -> 1 }
 
     val onJawab: (Boolean) -> Unit = { benar ->
-        haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+        haptic.performHapticFeedback(androidx.compose.ui.hapticfeedback.HapticFeedbackType.LongPress)
         if (benar) kemajuan.tambahXp(10) else salah++
     }
     val lanjut: () -> Unit = {
@@ -146,11 +220,12 @@ fun Selesai(salah: Int, bintang: Int, onBack: () -> Unit, onUlang: () -> Unit) {
             verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
+            Text("MISI SELESAI", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
             Text("Topik selesai! 🎉", style = MaterialTheme.typography.headlineMedium)
             BintangAnimasi(bintang)
-            Text("Kesalahan: $salah  •  Bonus +${bintang * 10} XP")
+            Text("Kesalahan: $salah  •  Bonus +${bintang * 10} XP", color = MaterialTheme.colorScheme.onSurfaceVariant)
             Button(onClick = onBack, modifier = Modifier.fillMaxWidth()) { Text("Kembali ke daftar") }
-            OutlinedButton(onClick = onUlang, modifier = Modifier.fillMaxWidth()) { Text("Ulangi") }
+            OutlinedButton(onClick = onUlang, modifier = Modifier.fillMaxWidth()) { Text("Ulangi misi") }
         }
         if (bintang >= 2) Konfeti(Modifier.fillMaxSize())
     }
@@ -159,20 +234,26 @@ fun Selesai(salah: Int, bintang: Int, onBack: () -> Unit, onUlang: () -> Unit) {
 @Composable
 fun PelajaranView(p: Pelajaran, nomor: Int, total: Int, onCoba: (String) -> Unit, onLanjut: () -> Unit) {
     Column(Modifier.fillMaxSize().padding(16.dp)) {
-        LinearProgressIndicator(progress = { nomor / total.toFloat() }, modifier = Modifier.fillMaxWidth())
+        Text("PROGRESS  /  ${nomor + 1} DARI $total", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
+        LinearProgressIndicator(
+            progress = { (nomor + 1) / total.toFloat() },
+            modifier = Modifier.fillMaxWidth().padding(top = 6.dp),
+            color = MaterialTheme.colorScheme.primary,
+            trackColor = MaterialTheme.colorScheme.surfaceVariant,
+        )
         Column(
-            Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(vertical = 12.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
+            Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(vertical = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(14.dp),
         ) {
             Text(p.judul, style = MaterialTheme.typography.headlineSmall)
             p.blok.forEach { b ->
                 when (b) {
-                    is Teks -> Text(b.isi)
+                    is Teks -> Text(b.isi, style = MaterialTheme.typography.bodyLarge, lineHeight = 25.sp)
                     is Kode -> KodeBox(b.kode, onCoba)
                 }
             }
         }
-        Button(onClick = onLanjut, modifier = Modifier.fillMaxWidth()) { Text("Lanjut") }
+        Button(onClick = onLanjut, modifier = Modifier.fillMaxWidth()) { Text("Lanjutkan") }
     }
 }
 
@@ -180,12 +261,17 @@ fun PelajaranView(p: Pelajaran, nomor: Int, total: Int, onCoba: (String) -> Unit
 fun SoalView(s: Soal, nomor: Int, total: Int, onJawab: (Boolean) -> Unit, onLanjut: () -> Unit, terakhir: Boolean) {
     var pilih by remember(s) { mutableStateOf<Int?>(null) }
     Column(Modifier.fillMaxSize().padding(16.dp)) {
-        LinearProgressIndicator(progress = { nomor / total.toFloat() }, modifier = Modifier.fillMaxWidth())
+        Text("KNOWLEDGE CHECK  /  ${nomor + 1} DARI $total", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
+        LinearProgressIndicator(
+            progress = { (nomor + 1) / total.toFloat() },
+            modifier = Modifier.fillMaxWidth().padding(top = 6.dp),
+            trackColor = MaterialTheme.colorScheme.surfaceVariant,
+        )
         Column(
-            Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(vertical = 12.dp),
+            Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(vertical = 16.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {
-            Text(if (s.kode != null) "Isi bagian kosong" else "Kuis", style = MaterialTheme.typography.labelLarge)
+            Text(if (s.kode != null) "ISI BAGIAN KOSONG" else "KUIS", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.secondary)
             Text(s.tanya, style = MaterialTheme.typography.titleMedium)
             s.kode?.let { KodeBox(it) }
             s.pilihan.forEachIndexed { i, teks ->
@@ -204,16 +290,20 @@ fun SoalView(s: Soal, nomor: Int, total: Int, onJawab: (Boolean) -> Unit, onLanj
                         }
                     },
                     color = warna,
-                    shape = RoundedCornerShape(12.dp),
+                    shape = RoundedCornerShape(13.dp),
+                    border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.22f)),
                     modifier = Modifier.fillMaxWidth(),
                 ) { Text(teks, Modifier.padding(16.dp)) }
             }
             if (pilih != null) {
-                Text(if (pilih == s.jawaban) "Benar! +10 XP 🎉" else "Belum tepat. Jawaban yang benar sudah ditandai.")
+                Text(
+                    if (pilih == s.jawaban) "Benar! +10 XP 🎉" else "Belum tepat. Jawaban yang benar sudah ditandai.",
+                    color = if (pilih == s.jawaban) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error,
+                )
             }
         }
         Button(onClick = onLanjut, enabled = pilih != null, modifier = Modifier.fillMaxWidth()) {
-            Text(if (terakhir) "Selesai" else "Lanjut")
+            Text(if (terakhir) "Selesaikan topik" else "Lanjut")
         }
     }
 }
@@ -224,21 +314,27 @@ fun SusunView(s: Susun, nomor: Int, total: Int, onJawab: (Boolean) -> Unit, onLa
     val dipilih = remember(s) { mutableStateListOf<Int>() }
     var hasil by remember(s) { mutableStateOf<Boolean?>(null) }
     Column(Modifier.fillMaxSize().padding(16.dp)) {
-        LinearProgressIndicator(progress = { nomor / total.toFloat() }, modifier = Modifier.fillMaxWidth())
+        Text("CODE PUZZLE  /  ${nomor + 1} DARI $total", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
+        LinearProgressIndicator(
+            progress = { (nomor + 1) / total.toFloat() },
+            modifier = Modifier.fillMaxWidth().padding(top = 6.dp),
+            trackColor = MaterialTheme.colorScheme.surfaceVariant,
+        )
         Column(
-            Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(vertical = 12.dp),
+            Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(vertical = 16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            Text("Susun kode", style = MaterialTheme.typography.labelLarge)
-            Text(s.tanya, style = MaterialTheme.typography.titleMedium)
-            Text("Jawabanmu (ketuk untuk melepas):", style = MaterialTheme.typography.labelMedium)
+            Text("Susun kode", style = MaterialTheme.typography.titleLarge)
+            Text(s.tanya, style = MaterialTheme.typography.bodyMedium)
+            Text("JAWABANMU (KETUK UNTUK MELEPAS)", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
             Surface(
                 color = MaterialTheme.colorScheme.surfaceVariant,
-                shape = RoundedCornerShape(12.dp),
+                shape = RoundedCornerShape(14.dp),
+                border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.25f)),
                 modifier = Modifier.fillMaxWidth().heightIn(min = 72.dp),
             ) {
                 Column(Modifier.padding(8.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                    if (dipilih.isEmpty()) Text("Ketuk baris di bawah untuk menyusunnya di sini…")
+                    if (dipilih.isEmpty()) Text("Ketuk baris di bawah untuk menyusunnya di sini…", color = MaterialTheme.colorScheme.onSurfaceVariant)
                     dipilih.toList().forEach { idx ->
                         BarisKode(acak[idx]) {
                             if (hasil != true) { dipilih.removeAll { it == idx }; hasil = null }
@@ -246,7 +342,7 @@ fun SusunView(s: Susun, nomor: Int, total: Int, onJawab: (Boolean) -> Unit, onLa
                     }
                 }
             }
-            Text("Pilihan baris:", style = MaterialTheme.typography.labelMedium)
+            Text("PILIHAN BARIS", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
             acak.forEachIndexed { idx, baris ->
                 if (idx !in dipilih) {
                     BarisKode(baris) {
@@ -254,11 +350,16 @@ fun SusunView(s: Susun, nomor: Int, total: Int, onJawab: (Boolean) -> Unit, onLa
                     }
                 }
             }
-            hasil?.let { Text(if (it) "Benar! +10 XP 🎉" else "Urutannya belum tepat. Coba susun ulang!") }
+            hasil?.let {
+                Text(
+                    if (it) "Benar! +10 XP 🎉" else "Urutannya belum tepat. Coba susun ulang!",
+                    color = if (it) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error,
+                )
+            }
         }
         if (hasil == true) {
             Button(onClick = onLanjut, modifier = Modifier.fillMaxWidth()) {
-                Text(if (terakhir) "Selesai" else "Lanjut")
+                Text(if (terakhir) "Selesaikan topik" else "Lanjut")
             }
         } else {
             Button(
@@ -269,7 +370,7 @@ fun SusunView(s: Susun, nomor: Int, total: Int, onJawab: (Boolean) -> Unit, onLa
                 },
                 enabled = dipilih.size == acak.size,
                 modifier = Modifier.fillMaxWidth(),
-            ) { Text("Periksa") }
+            ) { Text("Periksa jawaban") }
         }
     }
 }
@@ -280,11 +381,27 @@ fun SusunView(s: Susun, nomor: Int, total: Int, onJawab: (Boolean) -> Unit, onLa
 fun LatihanList(onBuka: (Int) -> Unit) {
     Halaman("Latihan") {
         LazyColumn(contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            item {
+                Text("PRACTICE BAY", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
+                Text("Uji kemampuanmu lewat tantangan coding.", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
             itemsIndexed(Konten.latihan) { i, l ->
-                Card(onClick = { onBuka(i) }, modifier = Modifier.fillMaxWidth()) {
-                    Column(Modifier.padding(16.dp)) {
-                        Text(l.judul, style = MaterialTheme.typography.titleMedium)
-                        Text("Tingkat: ${l.tingkat}", style = MaterialTheme.typography.bodyMedium)
+                Card(
+                    onClick = { onBuka(i) },
+                    modifier = Modifier.fillMaxWidth().border(1.dp, NeonBorder, RoundedCornerShape(16.dp)),
+                    shape = RoundedCornerShape(16.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
+                ) {
+                    Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
+                        Surface(color = MaterialTheme.colorScheme.secondaryContainer, shape = CircleShape) {
+                            Text("${i + 1}", Modifier.padding(12.dp), color = MaterialTheme.colorScheme.secondary)
+                        }
+                        Spacer(Modifier.width(12.dp))
+                        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                            Text(l.judul, style = MaterialTheme.typography.titleMedium)
+                            Text("TINGKAT: ${l.tingkat.uppercase()}", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
+                        Text("›", color = MaterialTheme.colorScheme.primary, style = MaterialTheme.typography.headlineMedium)
                     }
                 }
             }
@@ -301,10 +418,10 @@ fun LatihanScreen(index: Int, onBack: () -> Unit, onCoba: (String) -> Unit) {
             Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
-            Text("Tingkat: ${l.tingkat}", style = MaterialTheme.typography.labelLarge)
-            Text(l.soal)
+            Text("PRACTICE MISSION  /  ${l.tingkat.uppercase()}", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.secondary)
+            Text(l.soal, style = MaterialTheme.typography.bodyLarge, lineHeight = 25.sp)
             Button(onClick = { onCoba("# Tulis solusimu di sini\n") }, modifier = Modifier.fillMaxWidth()) {
-                Text("Kerjakan di editor")
+                Text("Kerjakan di Code Lab")
             }
             OutlinedButton(onClick = { tampil = !tampil }, modifier = Modifier.fillMaxWidth()) {
                 Text(if (tampil) "Sembunyikan solusi" else "Lihat solusi")
@@ -320,11 +437,21 @@ fun LatihanScreen(index: Int, onBack: () -> Unit, onCoba: (String) -> Unit) {
 fun AlgoritmaList(onBuka: (Int) -> Unit) {
     Halaman("Algoritma") {
         LazyColumn(contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            item {
+                Text("ALGORITHM ARCHIVE", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
+                Text("Pelajari cara program memecahkan masalah.", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
             itemsIndexed(Konten.algoritma) { i, a ->
-                Card(onClick = { onBuka(i) }, modifier = Modifier.fillMaxWidth()) {
-                    Column(Modifier.padding(16.dp)) {
+                Card(
+                    onClick = { onBuka(i) },
+                    modifier = Modifier.fillMaxWidth().border(1.dp, NeonBorder, RoundedCornerShape(16.dp)),
+                    shape = RoundedCornerShape(16.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
+                ) {
+                    Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                        Text("MODULE ${(i + 1).toString().padStart(2, '0')}", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
                         Text(a.judul, style = MaterialTheme.typography.titleMedium)
-                        Text(a.deskripsi, style = MaterialTheme.typography.bodyMedium)
+                        Text(a.deskripsi, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                 }
             }
@@ -340,7 +467,8 @@ fun AlgoritmaScreen(index: Int, onBack: () -> Unit, onCoba: (String) -> Unit) {
             Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
-            Text(a.deskripsi)
+            Text("ALGORITHM MODULE", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
+            Text(a.deskripsi, style = MaterialTheme.typography.bodyLarge, lineHeight = 25.sp)
             KodeBox(a.kode, onCoba)
         }
     }
