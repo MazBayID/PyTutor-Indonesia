@@ -20,7 +20,7 @@ Fitur yang sudah menjadi bagian dari fondasi proyek saat ini meliputi:
 
 - **Materi pembelajaran:** 10 sektor Python dari dasar, operator, string, koleksi, modul, hingga penanganan error.
 - **Kuis bertingkat:** soal dengan penilaian bintang 1–3 dan pembukaan topik secara berurutan.
-- **Latihan coding:** latihan pemrograman yang dilengkapi solusi.
+- **Latihan coding:** 9 tantangan dengan editor tertanam, input uji otomatis, pemeriksaan output, dan solusi.
 - **Kumpulan algoritma:** 7 contoh algoritma, termasuk visualisasi langkah Bubble Sort.
 - **Interpreter Python:** menjalankan dan mencoba kode Python menggunakan Skulpt, termasuk dukungan `input()`.
 - **Antarmuka sci-fi:** tema gelap bernuansa futuristik, kartu materi berwarna, dan dashboard progres.
