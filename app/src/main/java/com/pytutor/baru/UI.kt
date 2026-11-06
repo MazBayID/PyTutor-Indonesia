@@ -530,7 +530,7 @@ fun LatihanScreen(index: Int, kemajuan: Kemajuan, onBack: () -> Unit, onCoba: (S
                 }
             }
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                PyIcon(R.drawable.ic_terminal, "Output console", Modifier.size(18.dp))
+                PyIcon(R.drawable.ic_code, "Output console", Modifier.size(18.dp))
                 Text("OUTPUT CONSOLE", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
             }
             Surface(
