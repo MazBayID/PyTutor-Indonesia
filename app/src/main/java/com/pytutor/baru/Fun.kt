@@ -97,9 +97,11 @@ fun Kepala(k: Kemajuan) {
                 Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(7.dp)) {
                     Text("WELCOME BACK, EXPLORER", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
                     Text(pesan, style = MaterialTheme.typography.bodyMedium)
-                    Row(horizontalArrangement = Arrangement.spacedBy(14.dp)) {
+                    Row(horizontalArrangement = Arrangement.spacedBy(14.dp), verticalAlignment = Alignment.CenterVertically) {
+                        PyIcon(R.drawable.ic_rocket, "Level", Modifier.size(17.dp))
                         Text("LEVEL ${k.level}", style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.primary)
-                        Text("🔥 ${k.streakTampil} hari", style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.tertiary)
+                        PyIcon(R.drawable.ic_calendar, "Streak", Modifier.size(17.dp))
+                        Text("${k.streakTampil} hari", style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.tertiary)
                     }
                     LinearProgressIndicator(
                         progress = { progres },
@@ -107,7 +109,10 @@ fun Kepala(k: Kemajuan) {
                         color = MaterialTheme.colorScheme.primary,
                         trackColor = MaterialTheme.colorScheme.background,
                     )
-                    Text("$xpLevel / 100 XP", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(5.dp)) {
+                        PyIcon(R.drawable.ic_star, "XP", Modifier.size(15.dp))
+                        Text("$xpLevel / 100 XP", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    }
                 }
             }
             Box(
@@ -163,7 +168,10 @@ fun GalaxyPanel(k: Kemajuan) {
                     Text("LEARNING GALAXY", color = Color(0xFF55E6FF), style = MaterialTheme.typography.labelSmall)
                     Text("Peta perjalanan Python", color = Color.White, style = MaterialTheme.typography.titleMedium)
                 }
-                Text("✦ " + k.level, color = Color(0xFFB69CFF), style = MaterialTheme.typography.titleLarge)
+                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(5.dp)) {
+                    PyIcon(R.drawable.ic_rocket, "Level", Modifier.size(22.dp))
+                    Text(k.level.toString(), color = Color(0xFFB69CFF), style = MaterialTheme.typography.titleLarge)
+                }
             }
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text("$selesai / $total sektor", color = Color(0xFFD7E8F7))
@@ -171,7 +179,24 @@ fun GalaxyPanel(k: Kemajuan) {
                 Text("${(progress * 100).toInt()}%", color = Color(0xFF55E6FF))
             }
             LinearProgressIndicator(progress = { progress }, modifier = Modifier.fillMaxWidth().height(8.dp), color = Color(0xFF55E6FF), trackColor = Color(0xFF263D55))
-            Text("⚡ " + k.xp + " XP     🔥 " + k.streakTampil + " hari     🏅 " + milestone + " milestone", color = Color(0xFFD7E8F7), style = MaterialTheme.typography.labelMedium)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                    PyIcon(R.drawable.ic_star, "XP", Modifier.size(16.dp))
+                    Text("${k.xp} XP", color = Color(0xFFD7E8F7), style = MaterialTheme.typography.labelMedium)
+                }
+                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                    PyIcon(R.drawable.ic_calendar, "Streak", Modifier.size(16.dp))
+                    Text("${k.streakTampil} hari", color = Color(0xFFD7E8F7), style = MaterialTheme.typography.labelMedium)
+                }
+                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                    PyIcon(R.drawable.decor_trophy, "Milestone", Modifier.size(16.dp))
+                    Text("$milestone", color = Color(0xFFD7E8F7), style = MaterialTheme.typography.labelMedium)
+                }
+            }
         }
     }
 }
