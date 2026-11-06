@@ -17,6 +17,15 @@ class Kemajuan(context: Context) {
 
     var xp by mutableIntStateOf(sp.getInt("_xp", 0))
         private set
+
+    var namaProfil by androidx.compose.runtime.mutableStateOf(sp.getString("_nama_profil", "Python Explorer") ?: "Python Explorer")
+        private set
+
+    fun simpanNamaProfil(nama: String) {
+        val bersih = nama.trim().take(24).ifBlank { "Python Explorer" }
+        namaProfil = bersih
+        sp.edit().putString("_nama_profil", bersih).apply()
+    }
     private var streak = sp.getInt("_streak", 0)
     private var terakhir = sp.getString("_terakhir", "") ?: ""
 

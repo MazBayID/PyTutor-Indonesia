@@ -77,6 +77,7 @@ fun App(kemajuan: Kemajuan) {
         Tab("latihan", "Latihan", R.drawable.ic_idea),
         Tab("algoritma", "Algoritma", R.drawable.ic_trophy),
         Tab("coba", "Code Lab", R.drawable.ic_code),
+        Tab("profile", "Profile", R.drawable.ic_profile),
     )
     val tampilBar = tabs.any { it.rute == rute }
     val intArg = { nama: String -> listOf(navArgument(nama) { type = NavType.IntType }) }
@@ -126,6 +127,7 @@ fun App(kemajuan: Kemajuan) {
                 AlgoritmaScreen(it.arguments!!.getInt("i"), { nav.popBackStack() }, coba)
             }
             composable("coba") { InterpreterScreen(kodeEditor) { kodeEditor = it } }
+            composable("profile") { ProfileScreen(kemajuan) }
         }
     }
 }

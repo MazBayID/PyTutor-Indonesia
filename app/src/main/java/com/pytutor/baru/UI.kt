@@ -636,3 +636,80 @@ fun AlgoritmaScreen(index: Int, onBack: () -> Unit, onCoba: (String) -> Unit) {
         }
     }
 }
+
+
+/** Profile lokal dengan statistik progres dan pencapaian dasar. */
+@Composable
+fun ProfileScreen(kemajuan: Kemajuan) {
+    var nama by remember(kemajuan.namaProfil) { mutableStateOf(kemajuan.namaProfil) }
+    val selesai = Konten.topik.count { (kemajuan.bintang[it.id] ?: 0) > 0 }
+    val totalBintang = kemajuan.bintang.values.sum()
+    val milestone = listOf(100, 300, 500, 1000, 2000).count { kemajuan.xp >= it }
+    val topikTotal = Konten.topik.size
+
+    Halaman("Profile") {
+        Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
+            Card(Modifier.fillMaxWidth(), shape = RoundedCornerShape(22.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)) {
+                Column(Modifier.fillMaxWidth().padding(18.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                    PyIcon(R.drawable.pipi_reading, "Pipi menemani belajar", Modifier.size(112.dp))
+                    Text("LEARNER PROFILE", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
+                    OutlinedTextField(value = nama, onValueChange = { nama = it.take(24) }, modifier = Modifier.fillMaxWidth(), singleLine = true, label = { Text("Nama panggilan") }, leadingIcon = { PyIcon(R.drawable.ic_profile, null, Modifier.size(20.dp)) })
+                    Button(onClick = { kemajuan.simpanNamaProfil(nama) }, modifier = Modifier.fillMaxWidth()) { Text("Simpan nama") }
+                    Text("PYTHON EXPLORER • LEVEL ${kemajuan.level}", color = MaterialTheme.colorScheme.secondary, style = MaterialTheme.typography.labelMedium)
+                }
+            }
+            Text("STATISTIK BELAJAR", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
+            Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                ProfileStat("XP", kemajuan.xp.toString(), R.drawable.ic_star, Modifier.weight(1f))
+                ProfileStat("Level", kemajuan.level.toString(), R.drawable.ic_rocket, Modifier.weight(1f))
+            }
+            Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                ProfileStat("Streak", "${kemajuan.streakTampil} hari", R.drawable.ic_calendar, Modifier.weight(1f))
+                ProfileStat("Sektor", "$selesai / $topikTotal", R.drawable.ic_book, Modifier.weight(1f))
+            }
+            Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                ProfileStat("Bintang", totalBintang.toString(), R.drawable.ic_star, Modifier.weight(1f))
+                ProfileStat("Milestone", milestone.toString(), R.drawable.ic_trophy, Modifier.weight(1f))
+            }
+            Card(Modifier.fillMaxWidth(), shape = RoundedCornerShape(18.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)) {
+                Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        PyIcon(R.drawable.ic_progress, null, Modifier.size(22.dp)); Spacer(Modifier.width(8.dp)); Text("Learning progress", style = MaterialTheme.typography.titleMedium)
+                    }
+                    LinearProgressIndicator(progress = { if (topikTotal == 0) 0f else selesai / topikTotal.toFloat() }, modifier = Modifier.fillMaxWidth().height(8.dp))
+                    Text("$selesai dari $topikTotal sektor selesai", color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text("Progres dan XP disimpan secara lokal di perangkat ini.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+            }
+            Text("ACHIEVEMENTS", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
+            Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                listOf(
+                    Triple("First Steps", kemajuan.xp >= 10, R.drawable.decor_badge),
+                    Triple("100 XP", kemajuan.xp >= 100, R.drawable.decor_star_medal),
+                    Triple("Galaxy Explorer", selesai >= topikTotal, R.drawable.decor_rosette),
+                    Triple("Streak 3", kemajuan.streakTampil >= 3, R.drawable.decor_trophy),
+                ).forEach { (judul, unlocked, icon) ->
+                    Card(Modifier.width(132.dp), colors = CardDefaults.cardColors(containerColor = if (unlocked) MaterialTheme.colorScheme.secondaryContainer else MaterialTheme.colorScheme.surfaceVariant)) {
+                        Column(Modifier.padding(12.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                            PyIcon(icon, judul, Modifier.size(46.dp))
+                            Text(judul, style = MaterialTheme.typography.labelMedium)
+                            Text(if (unlocked) "UNLOCKED" else "LOCKED", style = MaterialTheme.typography.labelSmall, color = if (unlocked) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun ProfileStat(label: String, value: String, icon: Int, modifier: Modifier = Modifier) {
+    Card(modifier, shape = RoundedCornerShape(16.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)) {
+        Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(7.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                PyIcon(icon, null, Modifier.size(18.dp)); Text(label, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
+            Text(value, style = MaterialTheme.typography.titleLarge, color = MaterialTheme.colorScheme.primary)
+        }
+    }
+}
