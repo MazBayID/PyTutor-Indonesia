@@ -443,7 +443,7 @@ fun LatihanScreen(index: Int, kemajuan: Kemajuan, onBack: () -> Unit, onCoba: (S
     }
     LaunchedEffect(runner.berjalan, runner.output) {
         if (sudahDijalankan && !runner.berjalan && runner.siap && runner.output.isNotEmpty()) {
-            val benar = runner.output.trim() == l.hasilDiharapkan.trim()
+            val benar = normalisasiOutput(runner.output) == normalisasiOutput(l.hasilDiharapkan)
             lulus = benar
             if (benar) kemajuan.tambahXpLatihan(l.judul, 20)
         }
@@ -539,6 +539,14 @@ fun LatihanScreen(index: Int, kemajuan: Kemajuan, onBack: () -> Unit, onCoba: (S
         }
     }
 }
+
+/** Normalisasi ringan agar spasi tepi dan format baris tidak menggagalkan penilaian. */
+private fun normalisasiOutput(teks: String): String =
+    teks.replace("\r\n", "\n")
+        .lineSequence()
+        .map { it.trim() }
+        .joinToString("\n")
+        .trim()
 
 // ---------- Algoritma ----------
 
