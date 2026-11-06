@@ -17,7 +17,6 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -96,7 +95,7 @@ fun App(kemajuan: Kemajuan) {
                         NavigationBarItem(
                             selected = rute == t.rute,
                             onClick = { nav.navigate(t.rute) { popUpTo("belajar"); launchSingleTop = true } },
-                            icon = { Icon(painterResource(t.ikon), contentDescription = null) },
+                            icon = { PyIcon(t.ikon, null, Modifier.size(25.dp)) },
                             label = { Text(t.label) },
                             colors = NavigationBarItemDefaults.colors(
                                 selectedIconColor = NeoCyan,
