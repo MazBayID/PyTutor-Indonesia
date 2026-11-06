@@ -253,8 +253,9 @@ fun Selesai(salah: Int, bintang: Int, bonusXp: Int, onBack: () -> Unit, onUlang:
             verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
+            PyIcon(R.drawable.pipi_thumbs_up, "Pipi memberi selamat", Modifier.size(88.dp))
             Text("MISI SELESAI", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
-            Text("Topik selesai! 🎉", style = MaterialTheme.typography.headlineMedium)
+            Text("Topik selesai!", style = MaterialTheme.typography.headlineMedium)
             BintangAnimasi(bintang)
             Text("Kesalahan: $salah  •  XP baru: +$bonusXp", color = MaterialTheme.colorScheme.onSurfaceVariant)
             Button(onClick = onBack, modifier = Modifier.fillMaxWidth()) { Text("Kembali ke daftar") }
@@ -295,7 +296,10 @@ fun SoalView(s: Soal, nomor: Int, total: Int, xpId: String, onJawab: (String, Bo
     var pilih by remember(s) { mutableStateOf<Int?>(null) }
     var xpBaru by remember(s) { mutableStateOf(false) }
     Column(Modifier.fillMaxSize().padding(16.dp)) {
-        Text("KNOWLEDGE CHECK  /  ${nomor + 1} DARI $total", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+            PyIcon(R.drawable.ic_idea, "Kuis", Modifier.size(18.dp))
+            Text("KNOWLEDGE CHECK  /  ${nomor + 1} DARI $total", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
+        }
         LinearProgressIndicator(
             progress = { (nomor + 1) / total.toFloat() },
             modifier = Modifier.fillMaxWidth().padding(top = 6.dp),
@@ -350,7 +354,10 @@ fun SusunView(s: Susun, nomor: Int, total: Int, xpId: String, onJawab: (String, 
     var hasil by remember(s) { mutableStateOf<Boolean?>(null) }
     var xpBaru by remember(s) { mutableStateOf(false) }
     Column(Modifier.fillMaxSize().padding(16.dp)) {
-        Text("CODE PUZZLE  /  ${nomor + 1} DARI $total", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+            PyIcon(R.drawable.ic_code, "Puzzle kode", Modifier.size(18.dp))
+            Text("CODE PUZZLE  /  ${nomor + 1} DARI $total", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
+        }
         LinearProgressIndicator(
             progress = { (nomor + 1) / total.toFloat() },
             modifier = Modifier.fillMaxWidth().padding(top = 6.dp),
