@@ -17,7 +17,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -65,7 +65,7 @@ fun PyTutorTheme(content: @Composable () -> Unit) {
     MaterialTheme(colorScheme = scheme, content = content)
 }
 
-private data class Tab(val rute: String, val label: String, val ikon: ImageVector)
+private data class Tab(val rute: String, val label: String, val ikon: Int)
 
 @Composable
 fun App(kemajuan: Kemajuan) {
@@ -73,10 +73,10 @@ fun App(kemajuan: Kemajuan) {
     var kodeEditor by rememberSaveable { mutableStateOf("print(\"Halo, Python!\")") }
     val rute = nav.currentBackStackEntryAsState().value?.destination?.route
     val tabs = listOf(
-        Tab("belajar", "Belajar", Icons.Default.Home),
-        Tab("latihan", "Latihan", Icons.Default.Edit),
-        Tab("algoritma", "Algoritma", Icons.Default.List),
-        Tab("coba", "Code Lab", Icons.Default.PlayArrow),
+        Tab("belajar", "Belajar", R.drawable.ic_home),
+        Tab("latihan", "Latihan", R.drawable.ic_idea),
+        Tab("algoritma", "Algoritma", R.drawable.ic_trophy),
+        Tab("coba", "Code Lab", R.drawable.ic_code),
     )
     val tampilBar = tabs.any { it.rute == rute }
     val intArg = { nama: String -> listOf(navArgument(nama) { type = NavType.IntType }) }
@@ -96,7 +96,7 @@ fun App(kemajuan: Kemajuan) {
                         NavigationBarItem(
                             selected = rute == t.rute,
                             onClick = { nav.navigate(t.rute) { popUpTo("belajar"); launchSingleTop = true } },
-                            icon = { Icon(t.ikon, null) },
+                            icon = { Icon(painterResource(t.ikon), contentDescription = null) },
                             label = { Text(t.label) },
                             colors = NavigationBarItemDefaults.colors(
                                 selectedIconColor = NeoCyan,
