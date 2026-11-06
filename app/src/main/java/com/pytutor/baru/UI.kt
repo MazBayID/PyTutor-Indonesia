@@ -5,6 +5,7 @@ package com.pytutor.baru
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
@@ -24,6 +25,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.text.TextStyle
@@ -32,6 +35,20 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 private val NeonBorder = androidx.compose.ui.graphics.Color(0xFF28516B)
+
+/**
+ * Ikon PNG PyTutor ditampilkan sebagai Image agar warna asli aset tidak
+ * tertimpa tint otomatis dari Material Icon.
+ */
+@Composable
+fun PyIcon(resource: Int, description: String?, modifier: Modifier = Modifier) {
+    Image(
+        painter = painterResource(resource),
+        contentDescription = description,
+        modifier = modifier,
+        contentScale = ContentScale.Fit,
+    )
+}
 
 @Composable
 fun Halaman(judul: String, onBack: (() -> Unit)? = null, konten: @Composable () -> Unit) {
@@ -89,6 +106,8 @@ fun KodeBox(kode: String, onCoba: ((String) -> Unit)? = null) {
     ) {
         Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
+                PyIcon(R.drawable.ic_code, "Python", Modifier.size(18.dp))
+                Spacer(Modifier.width(6.dp))
                 Text("PYTHON", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
                 Spacer(Modifier.weight(1f))
                 Text("MONOSPACE", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -103,7 +122,7 @@ fun KodeBox(kode: String, onCoba: ((String) -> Unit)? = null) {
             )
             if (onCoba != null) {
                 TextButton(onClick = { onCoba(kode) }) {
-                    Icon(Icons.Default.PlayArrow, null)
+                    PyIcon(R.drawable.ic_play, "Jalankan kode", Modifier.size(18.dp))
                     Spacer(Modifier.width(4.dp))
                     Text("Coba jalankan")
                 }
@@ -166,7 +185,9 @@ fun TopikList(kemajuan: Kemajuan, onBuka: (Int) -> Unit) {
                             Text(t.judul, style = MaterialTheme.typography.titleMedium)
                             Text(t.deskripsi, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                             if (bintang > 0) {
-                                Text("★".repeat(bintang) + "☆".repeat(3 - bintang), color = MaterialTheme.colorScheme.tertiary)
+                                Row(horizontalArrangement = Arrangement.spacedBy(3.dp)) {
+                                    repeat(bintang) { PyIcon(R.drawable.ic_star, "Bintang diperoleh", Modifier.size(16.dp)) }
+                                }
                             }
                         }
                         if (!terbuka) Icon(Icons.Default.Lock, "Terkunci", tint = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -480,9 +501,15 @@ fun LatihanScreen(index: Int, kemajuan: Kemajuan, onBack: () -> Unit, onCoba: (S
                     },
                     enabled = runner.siap && !runner.berjalan,
                 ) {
+                    PyIcon(R.drawable.ic_play, null, Modifier.size(18.dp))
+                    Spacer(Modifier.width(6.dp))
                     Text(if (runner.berjalan) "Menjalankan…" else "Uji jawaban")
                 }
-                OutlinedButton(onClick = { onCoba(kode) }) { Text("Code Lab") }
+                OutlinedButton(onClick = { onCoba(kode) }) {
+                    PyIcon(R.drawable.ic_code, null, Modifier.size(18.dp))
+                    Spacer(Modifier.width(6.dp))
+                    Text("Code Lab")
+                }
             }
             Text(
                 if (!runner.siap) "MENYIAPKAN PYTHON…" else "TES OTOMATIS DENGAN INPUT CONTOH",
@@ -502,7 +529,10 @@ fun LatihanScreen(index: Int, kemajuan: Kemajuan, onBack: () -> Unit, onCoba: (S
                     )
                 }
             }
-            Text("OUTPUT CONSOLE", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                PyIcon(R.drawable.ic_terminal, "Output console", Modifier.size(18.dp))
+                Text("OUTPUT CONSOLE", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
+            }
             Surface(
                 color = MaterialTheme.colorScheme.surfaceVariant,
                 shape = RoundedCornerShape(12.dp),
@@ -516,6 +546,8 @@ fun LatihanScreen(index: Int, kemajuan: Kemajuan, onBack: () -> Unit, onCoba: (S
                 )
             }
             OutlinedButton(onClick = { tampilSolusi = !tampilSolusi }, modifier = Modifier.fillMaxWidth()) {
+                PyIcon(R.drawable.ic_bookmark, null, Modifier.size(18.dp))
+                Spacer(Modifier.width(6.dp))
                 Text(if (tampilSolusi) "Sembunyikan solusi" else "Lihat solusi")
             }
             if (tampilSolusi) KodeBox(l.solusi)
@@ -555,7 +587,10 @@ fun AlgoritmaList(onBuka: (Int) -> Unit) {
     Halaman("Algoritma") {
         LazyColumn(contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             item {
-                Text("ALGORITHM ARCHIVE", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
+                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    PyIcon(R.drawable.ic_rocket, "Arsip algoritma", Modifier.size(24.dp))
+                    Text("ALGORITHM ARCHIVE", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
+                }
                 Text("Pelajari cara program memecahkan masalah.", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
             itemsIndexed(Konten.algoritma) { i, a ->
