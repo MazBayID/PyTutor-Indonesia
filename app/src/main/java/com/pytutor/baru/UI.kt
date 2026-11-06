@@ -144,7 +144,10 @@ fun TopikList(kemajuan: Kemajuan, onBuka: (Int) -> Unit) {
             item { GalaxyPanel(kemajuan) }
             item {
                 Column(verticalArrangement = Arrangement.spacedBy(3.dp)) {
-                    Text("LEARNING PATH", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
+                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                        PyIcon(R.drawable.ic_book, "Learning path", Modifier.size(18.dp))
+                        Text("LEARNING PATH", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
+                    }
                     Text("Pilih sektor untuk memulai perjalananmu.", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             }
