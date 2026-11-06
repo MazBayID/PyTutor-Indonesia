@@ -194,8 +194,12 @@ fun InterpreterScreen(kode: String, onKode: (String) -> Unit) {
             "\"\"" -> sisip("\"\"", 1)
             "''" -> sisip("''", 1)
             "==", "!=", "<=", ">=", ":", "#", "_", "->", " and ", " or " -> sisip(label)
-            "UNDO" -> tombol("Z")
-            "REDO" -> tombol("Y")
+            "UNDO" -> if (undo.isNotEmpty()) {
+                redo.add(tfv); tfv = undo.removeAt(undo.lastIndex); onKode(tfv.text)
+            }
+            "REDO" -> if (redo.isNotEmpty()) {
+                undo.add(tfv); tfv = redo.removeAt(redo.lastIndex); onKode(tfv.text)
+            }
             else -> sisip(label)
         }
     }
