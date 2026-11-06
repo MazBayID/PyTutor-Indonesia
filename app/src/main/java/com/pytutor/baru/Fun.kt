@@ -7,6 +7,7 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
@@ -19,6 +20,8 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.sp
 import kotlin.math.sin
 import kotlin.random.Random
@@ -85,12 +88,12 @@ fun Kepala(k: Kemajuan) {
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(14.dp),
             ) {
-                Surface(
-                    shape = RoundedCornerShape(18.dp),
-                    color = MaterialTheme.colorScheme.primaryContainer,
-                ) {
-                    Text("🐍", Modifier.padding(12.dp), fontSize = 38.sp)
-                }
+                Image(
+                    painter = painterResource(R.drawable.pytutor_hero),
+                    contentDescription = "Pipi, maskot PyTutor Indonesia",
+                    modifier = Modifier.size(104.dp),
+                    contentScale = ContentScale.Fit,
+                )
                 Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(7.dp)) {
                     Text("WELCOME BACK, EXPLORER", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
                     Text(pesan, style = MaterialTheme.typography.bodyMedium)
